@@ -1,0 +1,12 @@
+services:
+  affine:
+    image: ghcr.io/toeverything/affine:stable
+    container_name: affine
+    ports:
+      - "3010:3010"
+    volumes:
+      - affine_data:/home/affine/.local/share/affine
+    restart: always
+
+volumes:
+  affine_data:
