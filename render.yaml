@@ -3,7 +3,7 @@ services:
     name: affine-self-hosted
     runtime: image
     image:
-      url: ghcr.io/toeverything/affine:stable
+      url: ghcr.io/toeverything/affine-self-hosted:latest
     plan: starter
     region: oregon
     healthCheckPath: /
@@ -12,5 +12,5 @@ services:
         value: "3010"
     disk:
       name: affine-data
-      mountPath: /home/affine/.local/share/affine
+      mountPath: /app/data
       sizeGB: 10
