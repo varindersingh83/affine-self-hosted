@@ -6,7 +6,6 @@ services:
       url: ghcr.io/toeverything/affine:stable
     plan: starter
     region: oregon
-    port: 3010
     healthCheckPath: /
     envVars:
       - key: PORT
