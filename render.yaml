@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: affine-self-hosted
+    runtime: image
+    image:
+      url: ghcr.io/toeverything/affine:stable
+    plan: starter
+    region: oregon
+    port: 3010
+    healthCheckPath: /
+    envVars:
+      - key: PORT
+        value: "3010"
+    disk:
+      name: affine-data
+      mountPath: /home/affine/.local/share/affine
+      sizeGB: 10
