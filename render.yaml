@@ -1,16 +1,53 @@
 services:
+  - type: pserv
+    name: redis
+    runtime: image
+    image:
+      url: redis:7-alpine
+    plan: starter
+    region: oregon
+    envVars:
+      - key: PORT
+        value: "6379"
+
   - type: web
     name: affine-self-hosted
     runtime: image
     image:
-      url: ghcr.io/toeverything/affine-self-hosted:latest
+      url: ghcr.io/toeverything/affine:stable
     plan: starter
     region: oregon
     healthCheckPath: /
+    preDeployCommand: node ./scripts/self-host-predeploy.js
     envVars:
       - key: PORT
         value: "3010"
+      - key: REDIS_SERVER_HOST
+        fromService:
+          name: redis
+          type: pserv
+          property: host
+      - key: REDIS_SERVER_PORT
+        fromService:
+          name: redis
+          type: pserv
+          property: port
+      - key: DATABASE_URL
+        fromDatabase:
+          name: affine-postgres
+          property: connectionString
+      - key: UPLOAD_LOCATION
+        value: /root/.affine/storage
+      - key: CONFIG_LOCATION
+        value: /root/.affine/config
+      - key: AFFINE_INDEXER_ENABLED
+        value: "false"
     disk:
       name: affine-data
-      mountPath: /app/data
+      mountPath: /root/.affine
       sizeGB: 10
+
+databases:
+  - name: affine-postgres
+    plan: basic-256mb
+    region: oregon
